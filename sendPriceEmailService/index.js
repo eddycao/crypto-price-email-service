@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
 
-const region = 'ap-southeast-2'; // Set AWS region to Sydney
+const region = 'ap-southeast-2'; // This is the sydney region, not so sure melbourne support these services so leave it with sydney
 AWS.config.update({ region });
 
 const ses = new AWS.SES();
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
 
         const price = response.data[cryptoId].aud;
 
-        // Build email content with HTML formatting
+        // Build email content with HTML and Text formatting
         const emailParams = {
             Destination: {
                 ToAddresses: [userEmail]
@@ -52,16 +52,25 @@ exports.handler = async (event) => {
                                 <p style="font-size: 16px;">The current price of <strong>${cryptoId}</strong> is <strong>$${price}</strong>.</p>
                                 <p style="font-size: 16px;">Remember, investing in crypto is like riding a roller coaster—thrilling but hold on tight!</p>
                                 <p style="font-size: 16px;">Best regards,<br/>
-                                Crypto Service Team</p>
+                                Demo Service</p>
                                 <hr/>
-                                <p style="font-size: 12px; color: gray;"><em>Data provided by Jun</em></p>
+                                <p style="font-size: 12px; color: gray;"><em>Information provided by Jun's demo, data reference: https://api.coingecko.com/api/v3/simple/price</em></p>
                             </body>
                             </html>
                         `
                     },
                     Text: {
                         Charset: 'UTF-8',
-                        Data: `Hello,\n\nThe current price of ${cryptoId} is $${price}.\n\nRemember, investing in crypto is like riding a roller coaster—thrilling but hold on tight!\n\nBest regards,\nCrypto Service Team\n\nData provided by Jun's demo\n reference: https://api.coingecko.com/api/v3/simple/price`
+                        Data: `Hello,
+
+The current price of ${cryptoId} is $${price}.
+
+Remember, investing in crypto is like riding a roller coaster—thrilling but hold on tight!
+
+Best regards,
+Demo Service
+
+Information provided by Jun's demo, data reference: https://api.coingecko.com/api/v3/simple/price`
                     }
                 },
                 Subject: {
@@ -72,17 +81,14 @@ exports.handler = async (event) => {
             Source: 'cao1542980497@icloud.com'
         };
 
-        // Send email via SES
         await ses.sendEmail(emailParams).promise();
 
-        // Create search record
+        // Create search record and save it to my dynamoDB
         const searchRecord = {
             userEmail: userEmail,
             timestamp: new Date().toISOString(),
             cryptoId: cryptoId
         };
-
-        // Save search record to DynamoDB
         const dbParams = {
             TableName: 'CryptoSearchHistory',
             Item: searchRecord
