@@ -8,18 +8,36 @@ const ses = new AWS.SES();
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event) => {
+    //preflight request
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+            },
+            body: ''
+        };
+    }
+
     try {
         const { cryptoId, userEmail } = JSON.parse(event.body);
 
-        // Validate input parameters
+        
         if (!cryptoId || !userEmail) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ message: 'Missing cryptoId or userEmail in request body.' })
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': '*',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                },
+                body: JSON.stringify({ message: 'No cryptoId or userEmail body.' })
             };
         }
 
-        // Call CoinGecko API to get cryptocurrency price
+        // Call CoinGecko API
         const response = await axios.get(`https://api.coingecko.com/api/v3/simple/price`, {
             params: {
                 ids: cryptoId,
@@ -30,6 +48,11 @@ exports.handler = async (event) => {
         if (!response.data || !response.data[cryptoId]) {
             return {
                 statusCode: 404,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': '*',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                },
                 body: JSON.stringify({ message: 'Cryptocurrency not found.' })
             };
         }
@@ -81,14 +104,17 @@ Information provided by Jun's demo, data reference: https://api.coingecko.com/ap
             Source: 'cao1542980497@icloud.com'
         };
 
+        // Send email via SES
         await ses.sendEmail(emailParams).promise();
 
-        // Create search record and save it to my dynamoDB
+        // Create search record
         const searchRecord = {
             userEmail: userEmail,
             timestamp: new Date().toISOString(),
             cryptoId: cryptoId
         };
+
+        // Save search record to DynamoDB
         const dbParams = {
             TableName: 'CryptoSearchHistory',
             Item: searchRecord
@@ -98,12 +124,22 @@ Information provided by Jun's demo, data reference: https://api.coingecko.com/ap
 
         return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+            },
             body: JSON.stringify({ message: 'Email sent successfully.' })
         };
     } catch (error) {
         console.error(error);
         return {
             statusCode: 500,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+            },
             body: JSON.stringify({ message: 'Internal server error.' })
         };
     }
