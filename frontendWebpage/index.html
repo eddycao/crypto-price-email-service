@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Get Cryptocurrency Price via Email</h1>        
+        <h1>Get Cryptocurrency Price via Email</h1>
         <form id="crypto-form">
             <label for="cryptoId">Cryptocurrency ID:</label>
             <input type="text" id="cryptoId" name="cryptoId" required>
@@ -18,7 +18,7 @@
             <button type="submit">Submit</button>
         </form>
         <div id="message"></div>
-        
+
         <h2>View Your Search History</h2>
         <form id="history-form">
             <label for="historyEmail">Your Email:</label>
@@ -27,6 +27,11 @@
             <button type="submit">Get History</button>
         </form>
         <div id="history"></div>
+
+        <h2>Available Cryptocurrencies</h2>
+        <em>coins data from: https://api.coingecko.com/api/v3/coins/list</em>
+        <input type="text" id="coin-search" placeholder="Search coins...">
+        <div id="coin-list"></div>
     </div>
     <script src="demo.js"></script>
 </body>

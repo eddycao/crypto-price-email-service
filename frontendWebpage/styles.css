@@ -71,3 +71,40 @@ li {
     border-radius: 3px;
     text-align: left;
 }
+#coin-search {
+    width: 100%;
+    padding: 8px;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+#coin-list {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #f9f9f9;
+}
+
+#coin-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#coin-list li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#coin-list li:hover {
+    background-color: #eaeaea;
+}
+
+#coin-list li:last-child {
+    border-bottom: none;
+}
