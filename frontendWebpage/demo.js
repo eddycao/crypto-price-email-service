@@ -50,6 +50,7 @@ form.addEventListener('submit', async (e) => {
 const historyForm = document.getElementById('history-form');
 const historyDiv = document.getElementById('history');
 
+
 // Add event listener to the history form
 historyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -77,7 +78,7 @@ historyForm.addEventListener('submit', async (e) => {
                 result.searchHistory.forEach(item => {
                     const listItem = document.createElement('li');
                     listItem.textContent = `Crypto: ${item.cryptoId}, Time: ${new Date(item.timestamp).toLocaleString()}`;
-                    list.appendChild(listItem);
+                    list.appendChild(listItem);                    
                 });
                 historyDiv.appendChild(list);
             } else {
@@ -94,7 +95,7 @@ historyForm.addEventListener('submit', async (e) => {
 
 const coinListDiv = document.getElementById('coin-list');
 const coinSearchInput = document.getElementById('coin-search');
-
+const prompt = document.getElementById('prompt-message');
 let coins = [];
 
 // Function to fetch coins list from CoinGecko API
@@ -118,6 +119,7 @@ function displayCoins(coinArray) {
         listItem.dataset.id = coin.id;
         listItem.addEventListener('click', () => {
             document.getElementById('cryptoId').value = listItem.dataset.id;
+            prompt.innerHTML = `Populated the <strong>${coin.name}</strong> to serching field!`
         });
         list.appendChild(listItem);
     });

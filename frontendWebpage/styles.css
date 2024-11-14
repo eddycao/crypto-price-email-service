@@ -108,3 +108,8 @@ li {
 #coin-list li:last-child {
     border-bottom: none;
 }
+
+#prompt-message{
+    margin-top: 10px;
+    color: green;
+}
