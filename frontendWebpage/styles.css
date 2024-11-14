@@ -12,7 +12,7 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
     color: #333;
 }
@@ -48,9 +48,26 @@ button:hover {
     background-color: #3b7b99;
 }
 
-#message {
+#message, #history {
     margin-top: 20px;
     text-align: center;
     font-size: 16px;
+}
+
+#message {
     color: #d9534f;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    text-align: left;
 }
